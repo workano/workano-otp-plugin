@@ -1,0 +1,29 @@
+#!/bin/sh
+
+case "$1" in
+build)
+    python3 setup.py bdist -d dist/python3
+    ;;
+
+package)
+    tar xvf dist/python3/workano-otp-request-plugin-*.tar.gz -C ${pkgdir}
+    cp -R etc ${pkgdir}/
+
+    ;;
+
+install)
+    systemctl restart wazo-calld
+    ;;
+
+uninstall)
+    rm -f /etc/wazo-calld/conf.d/50-workano-otp-request-plugin.yml
+    systemctl restart wazo-calld
+    ;;
+
+postrm) ;;
+
+    *)
+    echo "$0 called with unknown argument '$1'" >&2
+    exit 1
+    ;;
+esac
