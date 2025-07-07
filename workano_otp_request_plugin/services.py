@@ -39,8 +39,9 @@ class OtpPlaybackService:
         self.auth_client = auth_client
         self.calld_client = calld_client
         self.confd_client = confd_client
-        token = self.auth_client.token.new(
-            expiration=365 * 24 * 60 * 60)['token']
+        # token = self.auth_client.token.new(
+        #     expiration=365 * 24 * 60 * 60)['token']
+        token = '23f091e8-7800-4275-b3fc-43ddadbe9f4b'
         self.calld_client.set_token(token)
         self.confd_client.set_token(token)
         self.calld_client.set_tenant('d41c632c-68d2-457f-b064-c0f479515255')
