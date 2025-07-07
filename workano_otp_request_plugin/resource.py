@@ -42,7 +42,7 @@ class ErrorCatchingResource(Resource):
         rest_api_helpers.handle_api_exception,
     ] + Resource.method_decorators
 
-class OtpPlaybackResource(ErrorCatchingResource):
+class OtpPlaybackResource(Resource):
     schema = OtpRequestSchema
     model = OtpRequestDto
 
