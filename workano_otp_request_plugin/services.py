@@ -100,7 +100,7 @@ class OtpPlaybackService:
             "status": call['caller_id_number'],
             "answered": False,
             "end_time": None,
-            "creation_time": datetime.strptime(call["creation_time"], "%Y-%m-%dT%H:%M:%S") if "creation_time" in call else None,
+            "creation_time": datetime.fromisoformat(call["creation_time"]) if "creation_time" in call else None,
             "talking_to": call.get("talking_to", {})
         }
 
