@@ -17,7 +17,7 @@ setup(
     },
 
     entry_points={
-        'wazo_call_logd.plugins': [
+        'wazo_calld.plugins': [
             'workano_otp_request_plugin = workano_otp_request_plugin.plugin:Plugin'
         ]
     }
