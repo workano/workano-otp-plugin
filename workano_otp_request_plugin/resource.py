@@ -13,7 +13,7 @@ from wazo_confd.auth import required_acl
 # from wazo_calld.http import  Resource
 from flask_restful import Resource
 
-from .model import OtpRequestDto
+from .model import OtpRequestDto, OtpRequestModel
 from .schema import OtpRequestRequestSchema, OtpRequestSchema
 
 auth_verifier = AuthVerifierFlask()
@@ -51,7 +51,7 @@ class OtpPlaybackResource(Resource):
         self.service: OtpPlaybackService = service
 
     schema = OtpRequestSchema
-    model = OtpRequestDto
+    model = OtpRequestModel
     request_schema = OtpRequestRequestSchema
 
     def build_headers(self, model):
