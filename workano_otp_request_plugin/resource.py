@@ -1,7 +1,7 @@
 import logging
 from functools import wraps
 
-from ari.exceptions import ARIException, ARIHTTPError
+# from ari.exceptions import ARIException, ARIHTTPError
 from flask_restful import Resource
 from xivo import mallow_helpers, rest_api_helpers
 from xivo.flask.auth_verifier import AuthVerifierFlask
@@ -22,14 +22,16 @@ def handle_ari_exception(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except ARIHTTPError as e:
-            raise AsteriskARIError(
-                {'base_url': e.client.base_url}, e.original_error, e.original_message
-            )
-        except ARIException as e:
-            raise AsteriskARIUnreachable(
-                {'base_url': e.client.base_url}, e.original_error, e.original_message
-            )
+        except Exception as e:
+            raise e
+        # except ARIHTTPError as e:
+        #     raise AsteriskARIError(
+        #         {'base_url': e.client.base_url}, e.original_error, e.original_message
+        #     )
+        # except ARIException as e:
+        #     raise AsteriskARIUnreachable(
+        #         {'base_url': e.client.base_url}, e.original_error, e.original_message
+        #     )
 
     return wrapper
 
