@@ -28,8 +28,8 @@ class Plugin:
         api.add_resource(
             OtpPlaybackResource,
             '/otp',
+            endpoint='create_otp',
             resource_class_args=(otp_request_service,)
         )
-
     def unload(self):
         pass
