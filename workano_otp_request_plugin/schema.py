@@ -2,7 +2,7 @@ from marshmallow import fields, validates, ValidationError
 from wazo_confd.helpers.mallow import BaseSchema
 
 class OtpRequestRequestSchema(BaseSchema):
-    application_uuid = fields.Str(dump_only=True)
+    application_uuid = fields.Str()
     # language = fields.Str(required=True)
     uris = fields.List(fields.Str(), required=False)
     number = fields.Str(required=True)
