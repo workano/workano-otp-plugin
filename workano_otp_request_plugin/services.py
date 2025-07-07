@@ -98,7 +98,7 @@ class OtpPlaybackService:
             "language": language,
             "uris": uris,
             "status": call['caller_id_number'],
-            "answered": call['answrered'],
+            "answered": False,
             "end_time": None,
             "creation_time": datetime.strptime(call["creation_time"], "%Y-%m-%dT%H:%M:%S") if "creation_time" in call else None,
             "talking_to": call.get("talking_to", {})
