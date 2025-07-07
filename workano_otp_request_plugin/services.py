@@ -53,6 +53,8 @@ class OtpPlaybackService:
             params.get("uris"),
         )
 
+        # applicaiton = self.wazo_client.calld.sessions.originate(params)
+
         application = self.confd_client.applications.get(params.get("application_uuid"))
         if not application:  # If the application is None or empty
             return {
@@ -70,7 +72,8 @@ class OtpPlaybackService:
 
         otp_request = self.create_otp_request(
             params.get("application_uuid"),
-            params.get("language"),
+            # params.get("language"),
+            'fa',
             application['tenant_uuid'],
             params.get("uris"),
             call
