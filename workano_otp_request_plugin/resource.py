@@ -47,7 +47,7 @@ class OtpPlaybackResource(Resource):
     model = OtpRequestDto
 
     def build_headers(self, model):
-        return {'Location': url_for('otp_request_playback', uuid=model.application_uuid, _external=True)}
+        return {'Location': url_for('workano_otp_request_plugin', uuid=model.application_uuid, _external=True)}
 
     @required_acl('workano.otp.request')
     def post(self):
