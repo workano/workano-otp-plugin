@@ -43,6 +43,7 @@ class OtpPlaybackService:
             expiration=365 * 24 * 60 * 60)['token']
         self.calld_client.set_token(token)
         self.confd_client.set_token(token)
+        self.confd.client.set_tenant('3fea6514-4154-4304-9b82-d90a8ca92405')
 
     def process_otp_request(self, params):
         print(
