@@ -62,4 +62,4 @@ class OtpPlaybackResource(Resource):
         form = self.request_schema().load(request.get_json())
         # model = self.model(**form)
         model = self.service.process_otp_request(form)
-        return self.schema().dump(model['result']), 201, self.build_headers(model)
+        return self.schema().dump(model['result']), 201, self.build_headers(model['result'])
