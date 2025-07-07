@@ -60,6 +60,6 @@ class OtpPlaybackResource(Resource):
     @required_acl('workano.otp.request')
     def post(self):
         form = self.request_schema().load(request.get_json())
-        model = self.model(**form)
-        model = self.service.process_otp_request(model)
-        return self.schema().dump(model), 201, self.build_headers(model)
+        # model = self.model(**form)
+        model = self.service.process_otp_request(form)
+        return self.schema().dump(model.result), 201, self.build_headers(model)
