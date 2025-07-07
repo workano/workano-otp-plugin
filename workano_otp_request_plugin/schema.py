@@ -4,6 +4,7 @@ from wazo_confd.helpers.mallow import BaseSchema
 class OtpRequestRequestSchema(BaseSchema):
     application_uuid = fields.Str()
     # language = fields.Str(required=True)
+    context = fields.Str()
     uris = fields.List(fields.Str(), required=False)
     number = fields.Str(required=True)
     @validates("uris")
