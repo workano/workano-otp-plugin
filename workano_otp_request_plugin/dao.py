@@ -1,3 +1,4 @@
+from .db import ScopedSession
 from xivo_dao.helpers.db_manager import daosession
 
 from .persistor import OtpRequestPersistor
@@ -6,7 +7,8 @@ from .search import otp_request_search
 
 @daosession
 def _persistor(session, tenant_uuids=None):
-    return OtpRequestPersistor(session, otp_request_search, tenant_uuids)
+    s = ScopedSession
+    return OtpRequestPersistor(s, otp_request_search, tenant_uuids)
 
 
 def search(tenant_uuids=None, **parameters):
