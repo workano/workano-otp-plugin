@@ -44,6 +44,7 @@ class OtpPlaybackService:
         self.calld_client.set_token(token)
         self.confd_client.set_token(token)
         self.calld_client.set_tenant('d41c632c-68d2-457f-b064-c0f479515255')
+        self.confd_client.set_tenant('d41c632c-68d2-457f-b064-c0f479515255')
 
     def process_otp_request(self, params):
         print(
