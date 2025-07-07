@@ -45,7 +45,7 @@ class OtpPlaybackService:
         self.confd_client.set_token(token)
 
     def process_otp_request(self, params):
-        logger.info(
+        print(
             "Processing OTP request, application_uuid: %s, language: %s, number: %s, uris: %s",
             params.get("application_uuid"),
             params.get("language"),
