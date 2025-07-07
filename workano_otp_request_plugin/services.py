@@ -92,7 +92,7 @@ class OtpPlaybackService:
             "call_id": call['id'],
             "tenant_uuid": tenant_uuid,
             "application_uuid": application_uuid,
-            "number": call['number'],
+            "number": call['dialed_extension'],
             "caller_id_name": call['caller_id_name'],
             "caller_id_number": call['caller_id_number'],
             "language": language,
