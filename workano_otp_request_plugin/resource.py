@@ -2,7 +2,6 @@ import logging
 from functools import wraps
 
 # from ari.exceptions import ARIException, ARIHTTPError
-from flask_restful import Resource
 from xivo import mallow_helpers, rest_api_helpers
 from xivo.flask.auth_verifier import AuthVerifierFlask
 # from .exceptions import AsteriskARIError, AsteriskARIUnreachable
@@ -10,7 +9,7 @@ from xivo.flask.auth_verifier import AuthVerifierFlask
 
 from flask import url_for, request
 from wazo_confd.auth import required_acl
-from wazo_calld.http import AuthResource
+from wazo_calld.http import  Resource
 from .model import OtpRequestDto
 from .schema import OtpRequestSchema
 
