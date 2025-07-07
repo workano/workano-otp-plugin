@@ -70,6 +70,7 @@ class OtpPlaybackService:
             'exten': params.get("number"),
             'autoanswer': False
         }
+        print('callargs', call_args)
         call = self.calld_client.applications.make_call(params.get("application_uuid"), call_args)
         logger.info("Make a call: %s", call)
 
