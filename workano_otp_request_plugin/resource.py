@@ -5,7 +5,7 @@ from functools import wraps
 from flask_restful import Resource
 from xivo import mallow_helpers, rest_api_helpers
 from xivo.flask.auth_verifier import AuthVerifierFlask
-from .exceptions import AsteriskARIError, AsteriskARIUnreachable
+# from .exceptions import AsteriskARIError, AsteriskARIUnreachable
 
 
 from flask import url_for, request
