@@ -1,3 +1,4 @@
+import re
 import traceback
 import time
 from datetime import datetime
@@ -87,7 +88,9 @@ class OtpPlaybackService:
             "result": otp_request
         }
 
+
     def create_otp_request(self, application_uuid, language, tenant_uuid, uris, call):
+        creation_time = re.sub(r'([+-]\d{2})(\d{2})$', r'\1:\2', call['creation_time'])
         otp_request_args = {
             "call_id": call['id'],
             "tenant_uuid": tenant_uuid,
@@ -100,7 +103,7 @@ class OtpPlaybackService:
             "status": call['caller_id_number'],
             "answered": False,
             "end_time": None,
-            "creation_time": datetime.fromisoformat(call["creation_time"]) if "creation_time" in call else None,
+            "creation_time": datetime.fromisoformat(creation_time) if "creation_time" in call else None,
             "talking_to": call.get("talking_to", {})
         }
 
