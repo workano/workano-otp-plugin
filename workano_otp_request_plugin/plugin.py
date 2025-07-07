@@ -4,7 +4,7 @@ from wazo_auth_client import Client as AuthClient
 from wazo_confd_client import Client as ConfdClient
 from .db import init_db
 from .services import build_otp_request_service
-from bus_consume import OtpRequestBusEventHandler
+from .bus_consume import OtpRequestBusEventHandler
 from .resource import OtpPlaybackResource
 logger = logging.getLogger(__name__)
 
