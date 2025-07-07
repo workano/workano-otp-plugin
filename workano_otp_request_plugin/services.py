@@ -19,10 +19,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def build_otp_request_service(auth_client, calld_client):
+def build_otp_request_service(auth_client, calld_client, confd_client):
     return OtpPlaybackService(
         auth_client,
         calld_client,
+        confd_client,
         dao
     )
 
