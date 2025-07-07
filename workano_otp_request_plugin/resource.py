@@ -45,6 +45,10 @@ class ErrorCatchingResource(Resource):
     ] + Resource.method_decorators
 
 class OtpPlaybackResource(Resource):
+    def __init__(self, service):
+        super().__init__()
+        self.service = service
+
     schema = OtpRequestSchema
     model = OtpRequestDto
 
