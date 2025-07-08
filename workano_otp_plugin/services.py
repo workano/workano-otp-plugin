@@ -135,6 +135,9 @@ class OtpPlaybackService:
         dao.edit(otp_request)
         for index, uri in enumerate(otp_request.uris):
             logger.info("sending URI [%d]: %s", index, uri)
+            if(uri.startswith('custom:')):
+                name = uri.split(':')[1]
+                uri ='sound:' + os.path.join(UPLOAD_FOLDER, self.tenant, 'applications', otp_request.application_uuid, otp_request.language, name)
             playback = {
                 "uri": uri,
                 "language": otp_request.language,
