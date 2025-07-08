@@ -7,13 +7,8 @@ from xivo_dao.helpers.db_manager import UUIDAsString
 from sqlalchemy.types import JSON
 
 from .db import Base
-class OtpRequestDto:
-    application_uuid = Column(UUIDAsString(36), nullable=False)
-    language = Column(String(128), nullable=False)
-    uris = Column(JSON, nullable=True)
-    number = Column(String(128), nullable=False)
-    
-class OtpRequestModel(Base):
+
+class OtpModel(Base):
     __tablename__ = 'plugin_otp_playback_request'
     uuid = Column(UUIDAsString(36), primary_key=True,
                   server_default=text('uuid_generate_v4()'))

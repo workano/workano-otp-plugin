@@ -3,7 +3,7 @@ import traceback
 import time
 from datetime import datetime
 from threading import Thread
-from .model import OtpRequestModel
+from .model import OtpModel
 from datetime import datetime, timezone
 from marshmallow import ValidationError
 from wazo_calld_client import Client
@@ -107,7 +107,7 @@ class OtpPlaybackService:
             "talking_to": call.get("talking_to", {})
         }
 
-        otp_request = OtpRequestModel(**otp_request_args)
+        otp_request = OtpModel(**otp_request_args)
         return dao.create(otp_request)
 
     def application_call_answered(self, event):

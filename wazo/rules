@@ -6,7 +6,7 @@ build)
     ;;
 
 package)
-    tar xvf dist/python3/workano-otp-request-plugin-*.tar.gz -C ${pkgdir}
+    tar xvf dist/python3/workano-otp-plugin-*.tar.gz -C ${pkgdir}
     cp -R etc ${pkgdir}/
 
     ;;
@@ -16,7 +16,7 @@ install)
     ;;
 
 uninstall)
-    rm -f /etc/wazo-calld/conf.d/50-workano-otp-request-plugin.yml
+    rm -f /etc/wazo-calld/conf.d/50-workano-otp-plugin.yml
     systemctl restart wazo-calld
     ;;
 

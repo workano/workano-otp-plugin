@@ -1,7 +1,7 @@
 from marshmallow import fields, validates, ValidationError
 from wazo_confd.helpers.mallow import BaseSchema
 
-class OtpRequestRequestSchema(BaseSchema):
+class OtpRequestSchema(BaseSchema):
     application_uuid = fields.Str()
     # language = fields.Str(required=True)
     context = fields.Str()
@@ -37,7 +37,7 @@ class OtpRequestRequestSchema(BaseSchema):
             else:
                 raise ValidationError(f"Invalid uri prefix: '{prefix}'. Expected 'sound' or 'digits'.")
             
-class OtpRequestSchema(BaseSchema):
+class OtpSchema(BaseSchema):
     uuid = fields.Str(dump_only=True)
     call_id = fields.Str(dump_only=True)
     tenant_uuid = fields.Str(dump_only=True)

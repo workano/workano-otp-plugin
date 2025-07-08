@@ -4,7 +4,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(
-    name='workano-otp-request-plugin',
+    name='workano-otp-plugin',
     version='1.0',
     description='workano otp request plugin',
     author='workano team',
@@ -13,12 +13,12 @@ setup(
     url='https://workano.com',
     include_package_data=True,
     package_data={
-        'workano_otp_request_plugin': ['api.yml'],
+        'workano_otp_plugin': ['api.yml'],
     },
 
     entry_points={
         'wazo_calld.plugins': [
-            'workano_otp_request_plugin = workano_otp_request_plugin.plugin:Plugin'
+            'workano_otp_plugin = workano_otp_plugin.plugin:Plugin'
         ]
     }
 )

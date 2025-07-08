@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class OtpRequestBusEventHandler:
+class OtpBusEventHandler:
     def __init__(self, service):
         self._service = service
 
