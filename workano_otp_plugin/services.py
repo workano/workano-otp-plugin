@@ -111,6 +111,8 @@ class OtpPlaybackService:
         return dao.create(otp_request)
 
     def application_call_answered(self, event):
+        print('>>>>event')
+        print("👊 ~ event>> ", event)
         if event["call"]["is_caller"]:
             return
         call_id = event["call"]["call_id"]
