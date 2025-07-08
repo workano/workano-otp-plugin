@@ -19,3 +19,8 @@ class OtpRequestPersistor(CriteriaBuilderMixin, BasePersistor):
 
     def _search_query(self):
         return self.session.query(self.search_system.config.table)
+
+    def create(self, model):
+        self.session.add(model)
+        self.session.commit()  # commit added here
+        return model
