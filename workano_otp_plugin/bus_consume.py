@@ -14,7 +14,7 @@ class OtpBusEventHandler:
         # bus_consumer.subscribe('application_playback_created', self._application_playback_created)
         # bus_consumer.subscribe('application_call_entered', self._application_call_entered)
         # bus_consumer.subscribe('application_call_initiated', self._application_call_initiated)
-        # bus_consumer.subscribe('application_call_updated', self._application_call_updated)
+        bus_consumer.subscribe('application_call_updated', self._application_call_updated)
         # bus_consumer.subscribe('application_progress_started', self._application_progress_started)
         # bus_consumer.subscribe('application_progress_stopped', self._application_progress_stopped)
         # bus_consumer.subscribe('application_destination_node_created', self._application_destination_node_created)
@@ -62,9 +62,9 @@ class OtpBusEventHandler:
     #     logger.warning('========>application_call_initiated<===========')
     #     logger.warning(event)
 
-    # def _application_call_updated(self, event):
-    #     logger.warning('========>application_call_updated<===========')
-    #     logger.warning(event)
+    def _application_call_updated(self, event):
+        logger.warning('========>application_call_updated<===========')
+        logger.warning(event)
 
     # def _application_progress_started(self, event):
     #     logger.warning('========>application_progress_started<===========')
