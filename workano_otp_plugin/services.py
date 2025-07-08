@@ -132,6 +132,7 @@ class OtpPlaybackService:
             }
             playback = self.calld_client.applications.send_playback(
                 otp_request.application_uuid, otp_request.call_id, playback)
+        self.calld_client.applications.hangup_call(otp_request.application_uuid, otp_request.call_id)
         ###
 
     # def application_playback_created(self, event):
