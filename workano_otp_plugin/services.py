@@ -124,7 +124,7 @@ class OtpPlaybackService:
         otp_request.answered = True
         dao.edit(otp_request)
         for index, uri in enumerate(otp_request.uris):
-            logger.info("URI [%d]: %s", index, uri)
+            logger.info("sending URI [%d]: %s", index, uri)
             playback = {
                 "uri": uri,
                 "language": otp_request.language,
