@@ -1,3 +1,4 @@
+from workano_otp_plugin.model import OtpModel
 from .db import ScopedSession
 from xivo_dao.helpers.db_manager import daosession
 
@@ -19,7 +20,7 @@ def get(otp_uuid, tenant_uuids=None):
     return _persistor(tenant_uuids).get_by({'uuid': otp_uuid})
 
 
-def get_by(tenant_uuids=None, **criteria):
+def get_by(tenant_uuids=None, **criteria) -> OtpModel:
     return _persistor(tenant_uuids).get_by(criteria)
 
 

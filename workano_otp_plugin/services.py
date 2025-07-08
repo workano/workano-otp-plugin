@@ -120,7 +120,8 @@ class OtpPlaybackService:
         if not otp_request:
             logger.info("Couldn't find otp request for call_id: %s", call_id)
             return
-        otp_request['answer_time'] = datetime.now(timezone.utc);
+        otp_request.answer_time = datetime.now(timezone.utc)
+        otp_request.answered = True
         dao.edit(otp_request)
         for index, uri in enumerate(otp_request.uris):
             logger.info("URI [%d]: %s", index, uri)
