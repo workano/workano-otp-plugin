@@ -77,8 +77,7 @@ class OtpPlaybackService:
 
         otp_request = self.create_otp_request(
             params.get("application_uuid"),
-            # params.get("language"),
-            'en_US',
+            params.get("language"),
             application['tenant_uuid'],
             params.get("uris"),
             call

@@ -1,9 +1,13 @@
-from marshmallow import fields, validates, ValidationError
+from marshmallow import fields, validate, ValidationError
 from wazo_confd.helpers.mallow import BaseSchema
+from xivo.mallow.validate import Length, OneOf, Range, Regexp
 
 class OtpRequestSchema(BaseSchema):
     application_uuid = fields.Str()
-    # language = fields.Str(required=True)
+    language = fields.Str(
+        required=True, 
+        validate=OneOf(['en_US', 'fa_IR'])
+    )
     context = fields.Str()
     uris = fields.List(fields.Str(), required=False)
     number = fields.Str(required=True)
