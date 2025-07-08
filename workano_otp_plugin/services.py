@@ -55,6 +55,13 @@ class OtpPlaybackService:
         self.context = contexts['items'][0] if contexts['items'] and len(contexts['items'])> 0 else None
         print('contexts', self.context)
 
+    def process_custom_uri(self, uri, application_uuid, language):
+        if (uri.startswith('custom:')):
+            name = uri.split(':')[1]
+            return 'sound:' + os.path.join(UPLOAD_FOLDER, self.tenant, 'applications', application_uuid, language, name)
+        else:
+            return uri
+
     def process_otp_request(self, params):
         print(
             "Processing OTP request, application_uuid: %s, language: %s, number: %s, uris: %s",
@@ -135,9 +142,7 @@ class OtpPlaybackService:
         dao.edit(otp_request)
         for index, uri in enumerate(otp_request.uris):
             logger.info("sending URI [%d]: %s", index, uri)
-            if(uri.startswith('custom:')):
-                name = uri.split(':')[1]
-                uri ='sound:' + os.path.join(UPLOAD_FOLDER, self.tenant, 'applications', otp_request.application_uuid, otp_request.language, name)
+            uri = self.process_custom_uri(uri, otp_request.application_uuid, otp_request.language)
             playback = {
                 "uri": uri,
                 "language": otp_request.language,
@@ -162,7 +167,7 @@ class OtpPlaybackService:
         if not otp_request:
             logger.info("Couldn't find otp request for call_id: %s", call_id)
             return
-        last_uri = otp_request.uris[-1]
+        last_uri = self.process_custom_uri(otp_request.uris[-1], otp_request.application_uuid, otp_request.language)
         event_uri = event['playback']['uri']
         if event_uri == last_uri:
             logger.info("Event URI matches the last URI in the OTP request. Hanging up call.")
