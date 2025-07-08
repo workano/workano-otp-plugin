@@ -153,7 +153,7 @@ class OtpPlaybackService:
         event_uri = event['playback']['uri']
         if event_uri == last_uri:
             logger.info("Event URI matches the last URI in the OTP request. Hanging up call.")
-            self.hangup_application_call(event["application_uuid"])
+            # self.hangup_application_call(event["application_uuid"])
             otp_request.end_time = datetime.now(timezone.utc)
             dao.edit(otp_request)
             self.calld_client.applications.hangup_call(otp_request.application_uuid, call_id)
