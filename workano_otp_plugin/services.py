@@ -132,7 +132,7 @@ class OtpPlaybackService:
             }
             playback = self.calld_client.applications.send_playback(
                 otp_request.application_uuid, otp_request.call_id, playback)
-        self.calld_client.applications.hangup_call(otp_request.application_uuid, otp_request.call_id)
+        # self.calld_client.applications.hangup_call(otp_request.application_uuid, otp_request.call_id)
         ###
 
     # def application_playback_created(self, event):
@@ -143,19 +143,20 @@ class OtpPlaybackService:
     #     self.commit()
 
     def application_playback_deleted(self, event):
-        call_id = event['call_id']
+        logger.info("event playback deleted: %s", event)
+        call_id = event['call']['id']
         otp_request = dao.get_by(call_id=call_id)
         if not otp_request:
             logger.info("Couldn't find otp request for call_id: %s", call_id)
             return
         last_uri = otp_request.uris[-1]
-        event_uri = otp_request['playback']['uri']
+        event_uri = event['playback']['uri']
         if event_uri == last_uri:
             logger.info("Event URI matches the last URI in the OTP request. Hanging up call.")
             self.hangup_application_call(event["application_uuid"])
             otp_request.end_time = datetime.now(timezone.utc)
             dao.edit(otp_request)
-            self.calld_client.applications.hangup_call(otp_request["application_uuid"], call_id)
+            self.calld_client.applications.hangup_call(otp_request.application_uuid, call_id)
         # campaign_contact_call = self.find_last_campaign_contact_call(
         #     event["application_uuid"])
         # campaign_contact_call.playback_deleted = datetime.now()
