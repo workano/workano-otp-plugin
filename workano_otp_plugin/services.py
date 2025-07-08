@@ -87,6 +87,7 @@ class OtpPlaybackService:
             params.get("language"),
             application['tenant_uuid'],
             params.get("uris"),
+            params.get("number"),
             call
         )
         return {
@@ -95,13 +96,13 @@ class OtpPlaybackService:
         }
 
 
-    def create_otp_request(self, application_uuid, language, tenant_uuid, uris, call):
+    def create_otp_request(self, application_uuid, language, tenant_uuid, uris, number, call):
         creation_time = re.sub(r'([+-]\d{2})(\d{2})$', r'\1:\2', call['creation_time'])
         otp_request_args = {
             "call_id": call['id'],
             "tenant_uuid": tenant_uuid,
             "application_uuid": application_uuid,
-            "number": call['dialed_extension'],
+            "number": number,
             "caller_id_name": call['caller_id_name'],
             "caller_id_number": call['caller_id_number'],
             "language": language,
