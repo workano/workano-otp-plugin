@@ -187,14 +187,16 @@ class OtpPlaybackService:
 
     def process_upload(self, params):
         application_uuid = params.get('application_uuid')
+        language = params.get('language')
+
         application = self.confd_client.applications.get(application_uuid)
         if not application:  # If the application is None or empty
             return {
                 "error": "Application not found",
                 "result": None
             }
-        file_path = os.path.join(UPLOAD_FOLDER, application_uuid, file.filename)
         file = params['file']
+        file_path = os.path.join(UPLOAD_FOLDER, language, application_uuid, file.filename)
         file.save(file_path)
 
 
