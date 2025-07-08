@@ -62,6 +62,7 @@ class OtpPlaybackService:
         # applicaiton = self.wazo_client.calld.sessions.originate(params)
         context = self.confd_client.contexts.list(tenant=self.tenant, type='internal' )
         print('contexts', context)
+
         application = self.confd_client.applications.get(params.get("application_uuid"))
         if not application:  # If the application is None or empty
             return {
@@ -74,7 +75,7 @@ class OtpPlaybackService:
             'exten': params.get("number"),
             'autoanswer': False,
             'variables': {
-                "WAZO_TENANT_UUID": self.tenant
+                "WAZO_TENANT_UUID": '123'
             }
         }
         print('callargs', call_args)
