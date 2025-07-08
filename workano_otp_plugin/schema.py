@@ -17,10 +17,10 @@ class OtpRequestSchema(BaseSchema):
             if not isinstance(uri, str):
                 raise ValidationError(f"Invalid entry in uris: {uri} is not a string.")
 
-            # Check for duplicates
-            if uri in seen:
-                raise ValidationError(f"Duplicate uri found: {uri}.")
-            seen.add(uri)
+            # # Check for duplicates
+            # if uri in seen:
+            #     raise ValidationError(f"Duplicate uri found: {uri}.")
+            # seen.add(uri)
 
             # Split the string by ":"
             if ":" not in uri:
@@ -65,9 +65,9 @@ class OtpSchema(BaseSchema):
                 raise ValidationError(f"Invalid entry in uris: {uri} is not a string.")
 
             # Check for duplicates
-            if uri in seen:
-                raise ValidationError(f"Duplicate uri found: {uri}.")
-            seen.add(uri)
+            # if uri in seen:
+            #     raise ValidationError(f"Duplicate uri found: {uri}.")
+            # seen.add(uri)
 
             # Split the string by ":"
             if ":" not in uri:
