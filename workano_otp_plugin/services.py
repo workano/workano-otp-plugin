@@ -20,7 +20,7 @@ import logging
 # from ..contact_list.services import build_contact_list_service
 
 logger = logging.getLogger(__name__)
-UPLOAD_FOLDER = '/usr/share/asterisk/sounds'  # Make sure this directory exists and is writable
+UPLOAD_FOLDER = '/var/lib/wazo/sounds/tenants'  # Make sure this directory exists and is writable
 
 
 def build_otp_request_service(auth_client, calld_client, confd_client):
@@ -196,7 +196,7 @@ class OtpPlaybackService:
                 "result": None
             }
         file = params['file']
-        target_dir = os.path.join(UPLOAD_FOLDER, language, application_uuid)
+        target_dir = os.path.join(UPLOAD_FOLDER, application_uuid)
 
         # Create the directory if it doesn't exist
         os.makedirs(target_dir, exist_ok=True)
