@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from marshmallow import ValidationError
 from wazo_calld_client import Client
 from xivo_dao.helpers.db_manager import Session
+from wazo_confd_client import Client as ConfdClient
 
 from . import dao
 import logging
@@ -39,14 +40,15 @@ class OtpPlaybackService:
                  extra_parameters=None):
         self.auth_client = auth_client
         self.calld_client = calld_client
-        self.confd_client = confd_client
+        self.confd_client:ConfdClient  = confd_client
         # token = self.auth_client.token.new(
         #     expiration=365 * 24 * 60 * 60)['token']
         token = '23f091e8-7800-4275-b3fc-43ddadbe9f4b'
+        self.tenant = 'd41c632c-68d2-457f-b064-c0f479515255'
         self.calld_client.set_token(token)
         self.confd_client.set_token(token)
-        self.calld_client.set_tenant('d41c632c-68d2-457f-b064-c0f479515255')
-        self.confd_client.set_tenant('d41c632c-68d2-457f-b064-c0f479515255')
+        self.calld_client.set_tenant(self.tenant)
+        self.confd_client.set_tenant(self.tenant)
 
     def process_otp_request(self, params):
         print(
@@ -58,7 +60,8 @@ class OtpPlaybackService:
         )
 
         # applicaiton = self.wazo_client.calld.sessions.originate(params)
-
+        context = self.confd_client.contexts.list(tenant=self.tenant, contexttype='internal' )
+        print('contexts', context)
         application = self.confd_client.applications.get(params.get("application_uuid"))
         if not application:  # If the application is None or empty
             return {
@@ -153,9 +156,9 @@ class OtpPlaybackService:
         if event_uri == last_uri:
             logger.info("Event URI matches the last URI in the OTP request. Hanging up call.")
             # self.hangup_application_call(event["application_uuid"])
+            self.calld_client.applications.hangup_call(otp_request.application_uuid, call_id)
             otp_request.end_time = datetime.now(timezone.utc)
             dao.edit(otp_request)
-            self.calld_client.applications.hangup_call(otp_request.application_uuid, call_id)
         # campaign_contact_call = self.find_last_campaign_contact_call(
         #     event["application_uuid"])
         # campaign_contact_call.playback_deleted = datetime.now()
