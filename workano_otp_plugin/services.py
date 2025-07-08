@@ -196,7 +196,7 @@ class OtpPlaybackService:
                 "result": None
             }
         file = params['file']
-        target_dir = os.path.join(UPLOAD_FOLDER, application_uuid)
+        target_dir = os.path.join(UPLOAD_FOLDER, self.tenant,'applications', application_uuid)
 
         # Create the directory if it doesn't exist
         os.makedirs(target_dir, exist_ok=True)
