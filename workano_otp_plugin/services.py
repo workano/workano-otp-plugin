@@ -127,7 +127,8 @@ class OtpPlaybackService:
             logger.info("URI [%d]: %s", index, uri)
             playback = {
                 "uri": uri,
-                "language": otp_request.language
+                "language": otp_request.language,
+                "state": "play"
             }
             playback = self.calld_client.applications.send_playback(
                 otp_request.application_uuid, otp_request.call_id, playback)
