@@ -172,7 +172,7 @@ class OtpPlaybackService:
         # self.hangup_application_call(event["application_uuid"])
 
     def application_call_deleted(self, event):
-        call_id = event['call_id']
+        call_id = event['call']['id']
         otp_request = dao.get_by(call_id=call_id)
         if not otp_request:
             logger.info("Couldn't find otp request for call_id: %s", call_id)
