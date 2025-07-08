@@ -115,7 +115,7 @@ class OtpPlaybackService:
         print("👊 ~ event>> ", event)
         if event["call"]["is_caller"]:
             return
-        call_id = event["call"]["call_id"]
+        call_id = event["call"]["id"]
         otp_request = dao.get_by(call_id=call_id)
         if not otp_request:
             logger.info("Couldn't find otp request for call_id: %s", call_id)
