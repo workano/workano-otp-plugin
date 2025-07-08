@@ -10,7 +10,7 @@ class OtpBusEventHandler:
     def subscribe(self, bus_consumer):
         bus_consumer.subscribe('application_call_answered', self._application_call_answered)
         bus_consumer.subscribe('application_playback_deleted', self._application_playback_deleted)
-        bus_consumer.subscribe('application_call_deleted', self._application_call_deleted)
+        # bus_consumer.subscribe('application_call_deleted', self._application_call_deleted)
         # bus_consumer.subscribe('application_playback_created', self._application_playback_created)
         # bus_consumer.subscribe('application_call_entered', self._application_call_entered)
         # bus_consumer.subscribe('application_call_initiated', self._application_call_initiated)
@@ -45,14 +45,14 @@ class OtpBusEventHandler:
         # 'uuid': 'c3a0beff-67f8-4297-8fed-fac9fa3c6728', 'language': 'en'}}
         self._service.application_playback_deleted(event)
 
-    def _application_call_deleted(self, event):
-        logger.warning('========>application_call_deleted<===========')
-        logger.warning(event)
-        # {'application_uuid': '7d48038a-fede-4554-8ae0-1d0df26ff232', 'call': {'id': '1661578551.87', 'moh_uuid': None,
-        # 'caller_id_number': '100', 'tenant_uuid': None, 'dialed_extension': None, 'node_uuid': None, 'muted': False,
-        # 'snoops': {}, 'status': 'Up', 'creation_time': '2022-08-27T01:35:51.041-0400', 'caller_id_name': 'test1',
-        # 'user_uuid': None, 'is_caller': False, 'on_hold': False}}
-        self._service.application_call_deleted(event)
+    # def _application_call_deleted(self, event):
+    #     logger.warning('========>application_call_deleted<===========')
+    #     logger.warning(event)
+    #     # {'application_uuid': '7d48038a-fede-4554-8ae0-1d0df26ff232', 'call': {'id': '1661578551.87', 'moh_uuid': None,
+    #     # 'caller_id_number': '100', 'tenant_uuid': None, 'dialed_extension': None, 'node_uuid': None, 'muted': False,
+    #     # 'snoops': {}, 'status': 'Up', 'creation_time': '2022-08-27T01:35:51.041-0400', 'caller_id_name': 'test1',
+    #     # 'user_uuid': None, 'is_caller': False, 'on_hold': False}}
+    #     self._service.application_call_deleted(event)
 
     # def _application_call_entered(self, event):
     #     logger.warning('========>application_call_entered<===========')
