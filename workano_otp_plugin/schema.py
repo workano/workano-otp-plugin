@@ -3,12 +3,11 @@ from wazo_confd.helpers.mallow import BaseSchema
 from xivo.mallow.validate import Length, OneOf, Range, Regexp
 
 class OtpRequestSchema(BaseSchema):
-    application_uuid = fields.Str()
+    application_uuid = fields.Str(required=True)
     language = fields.Str(
         required=True, 
         validate=OneOf(['en_US', 'fa_IR'])
     )
-    context = fields.Str()
     uris = fields.List(fields.Str(), required=False)
     number = fields.Str(required=True)
     # @validates("uris")

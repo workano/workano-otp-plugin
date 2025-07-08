@@ -49,6 +49,9 @@ class OtpPlaybackService:
         self.confd_client.set_token(token)
         self.calld_client.set_tenant(self.tenant)
         self.confd_client.set_tenant(self.tenant)
+        contexts = self.confd_client.contexts.list(tenant=self.tenant, type='internal' )
+        self.context = contexts['items'][0] if contexts['items'] and len(contexts['items'])> 0 else None
+        print('contexts', self.context)
 
     def process_otp_request(self, params):
         print(
@@ -60,8 +63,6 @@ class OtpPlaybackService:
         )
 
         # applicaiton = self.wazo_client.calld.sessions.originate(params)
-        context = self.confd_client.contexts.list(tenant=self.tenant, type='internal' )
-        print('contexts', context)
 
         application = self.confd_client.applications.get(params.get("application_uuid"))
         if not application:  # If the application is None or empty
@@ -71,7 +72,7 @@ class OtpPlaybackService:
             }
 
         call_args = {
-            'context': params.get("context"),
+            'context': self.context['name'],
             'exten': params.get("number"),
             'autoanswer': False,
             'variables': {
