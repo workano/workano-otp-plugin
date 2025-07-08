@@ -75,7 +75,7 @@ class OtpPlaybackService:
             'exten': params.get("number"),
             'autoanswer': False,
             'variables': {
-                "WAZO_TENANT_UUID": '123'
+                "WAZO_TENANT_UUID":self.tenant
             }
         }
         print('callargs', call_args)
