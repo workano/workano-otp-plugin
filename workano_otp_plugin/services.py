@@ -60,7 +60,7 @@ class OtpPlaybackService:
         )
 
         # applicaiton = self.wazo_client.calld.sessions.originate(params)
-        context = self.confd_client.contexts.list(tenant=self.tenant, contexttype='internal' )
+        context = self.confd_client.contexts.list(tenant=self.tenant, type='internal' )
         print('contexts', context)
         application = self.confd_client.applications.get(params.get("application_uuid"))
         if not application:  # If the application is None or empty
