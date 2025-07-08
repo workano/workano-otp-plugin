@@ -24,3 +24,7 @@ class OtpPersistor(CriteriaBuilderMixin, BasePersistor):
         self.session.add(model)
         self.session.commit()  # commit added here
         return model
+
+    def edit(self, model):
+        self.persist(model)
+        self.session.commit()
