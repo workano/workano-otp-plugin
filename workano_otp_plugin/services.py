@@ -196,7 +196,15 @@ class OtpPlaybackService:
                 "result": None
             }
         file = params['file']
-        file_path = os.path.join(UPLOAD_FOLDER, language, application_uuid, file.filename)
+        target_dir = os.path.join(UPLOAD_FOLDER, language, application_uuid)
+
+        # Create the directory if it doesn't exist
+        os.makedirs(target_dir, exist_ok=True)
+
+        # Build full path for file
+        file_path = os.path.join(target_dir, file.filename)
+
+        # Save the file
         file.save(file_path)
 
 
