@@ -1,3 +1,4 @@
+import os
 import re
 import traceback
 import time
@@ -19,6 +20,7 @@ import logging
 # from ..contact_list.services import build_contact_list_service
 
 logger = logging.getLogger(__name__)
+UPLOAD_FOLDER = '/usr/share/asterisk/sounds'  # Make sure this directory exists and is writable
 
 
 def build_otp_request_service(auth_client, calld_client, confd_client):
@@ -182,6 +184,19 @@ class OtpPlaybackService:
             return
         otp_request.end_time = datetime.now(timezone.utc)
         dao.edit(otp_request)
+
+    def process_upload(self, params):
+        application_uuid = params.get('application_uuid')
+        application = self.confd_client.applications.get(application_uuid)
+        if not application:  # If the application is None or empty
+            return {
+                "error": "Application not found",
+                "result": None
+            }
+        file_path = os.path.join(UPLOAD_FOLDER, application_uuid, file.filename)
+        file = params['file']
+        file.save(file_path)
+
 
     # def find_next_campaign_contact_call(self, application_uuid):
     #     campaign = self.get_by(application_uuid=application_uuid)

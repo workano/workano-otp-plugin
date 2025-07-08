@@ -1,6 +1,30 @@
-from marshmallow import fields, validate, ValidationError
+from marshmallow import fields, validate, ValidationError, validates_schema
 from wazo_confd.helpers.mallow import BaseSchema
 from xivo.mallow.validate import Length, OneOf, Range, Regexp
+
+class OtpUploadRequestSchema(BaseSchema):
+    language = fields.Str(
+        required=True, 
+        validate=OneOf(['en_US', 'fa_IR'])
+    )
+    file = fields.Raw(required=True)
+    application_uuid = fields.Str(required=True)
+    
+    @validates_schema
+    def validate_file(self, data, **kwargs):
+        file = data.get('file')
+
+        if not file:
+            raise ValidationError('No file uploaded.', field_name='file')
+
+        if not hasattr(file, 'filename'):
+            raise ValidationError('Invalid file type.', field_name='file')
+
+        allowed_extensions = {'.mp3', '.wav'}
+        filename = file.filename
+        if '.' not in filename or os.path.splitext(filename)[1].lower() not in allowed_extensions:
+            raise ValidationError(f'File type not allowed. Allowed: {", ".join(allowed_extensions)}', field_name='file')
+
 
 class OtpRequestSchema(BaseSchema):
     application_uuid = fields.Str(required=True)

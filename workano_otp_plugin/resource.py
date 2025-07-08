@@ -1,6 +1,8 @@
 import logging
 from functools import wraps
 
+from marshmallow import ValidationError
+
 # from ari.exceptions import ARIException, ARIHTTPError
 from .services import OtpPlaybackService
 from xivo import mallow_helpers, rest_api_helpers
@@ -14,7 +16,7 @@ from wazo_confd.auth import required_acl
 from flask_restful import Resource
 
 from .model import OtpModel
-from .schema import OtpRequestSchema, OtpSchema
+from .schema import OtpRequestSchema, OtpSchema, OtpUploadRequestSchema
 
 auth_verifier = AuthVerifierFlask()
 logger = logging.getLogger(__name__)
@@ -63,3 +65,21 @@ class OtpPlaybackResource(Resource):
         # model = self.model(**form)
         model = self.service.process_otp_request(form)
         return self.schema().dump(model['result']), 201, self.build_headers(model['result'])
+    
+class OtpFileUploadResource(Resource):
+    def __init__(self, service):
+        super().__init__()
+        self.service: OtpPlaybackService = service
+    
+    @required_acl('workano.otp.upload')
+    def post(self):
+        json_part = request.form.to_dict()
+        file_part = request.files.get('file')
+        data = {**json_part, 'file': file_part}
+        schema = OtpUploadRequestSchema()
+        try:
+            result = schema.load(data)
+        except ValidationError as err:
+            return {'errors': err.messages}, 400
+        self.service.process_upload(result)
+        return {'message': 'File uploaded successfully'}
