@@ -144,7 +144,7 @@ class OtpPlaybackService:
 
     def application_playback_deleted(self, event):
         logger.info("event playback deleted: %s", event)
-        call_id = event['call']['id']
+        call_id = event['call_id']
         otp_request = dao.get_by(call_id=call_id)
         if not otp_request:
             logger.info("Couldn't find otp request for call_id: %s", call_id)
