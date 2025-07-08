@@ -9,7 +9,7 @@ class OtpBusEventHandler:
 
     def subscribe(self, bus_consumer):
         bus_consumer.subscribe('application_call_answered', self._application_call_answered)
-        # bus_consumer.subscribe('application_playback_deleted', self._application_playback_deleted)
+        bus_consumer.subscribe('application_playback_deleted', self._application_playback_deleted)
         # bus_consumer.subscribe('application_call_deleted', self._application_call_deleted)
         # bus_consumer.subscribe('application_playback_created', self._application_playback_created)
         # bus_consumer.subscribe('application_call_entered', self._application_call_entered)
