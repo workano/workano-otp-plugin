@@ -74,9 +74,9 @@ class OtpPlaybackService:
             'context': params.get("context"),
             'exten': params.get("number"),
             'autoanswer': False,
-            'variables': {
-                "WAZO_TENANT_UUID":self.tenant
-            }
+            # 'variables': {
+            #     "WAZO_TENANT_UUID": self.tenant
+            # }
         }
         print('callargs', call_args)
         call = self.calld_client.applications.make_call(params.get("application_uuid"), call_args)
