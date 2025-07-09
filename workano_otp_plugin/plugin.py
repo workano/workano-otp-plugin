@@ -41,5 +41,10 @@ class Plugin:
             '/otp/upload',
             resource_class_args=(otp_request_service,)
         )
+        api.add_resource(
+            OtpReportResource,
+            '/otp/report',
+            resource_class_args=(otp_request_service,)
+        )
     def unload(self):
         pass

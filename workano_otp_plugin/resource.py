@@ -16,7 +16,7 @@ from wazo_confd.auth import required_acl
 from flask_restful import Resource
 
 from .model import OtpModel
-from .schema import OtpRequestSchema, OtpSchema, OtpUploadRequestSchema
+from .schema import OtpRequestSchema, OtpSchema, OtpUploadRequestSchema, ReportRequestSchema
 
 auth_verifier = AuthVerifierFlask()
 logger = logging.getLogger(__name__)
@@ -83,3 +83,17 @@ class OtpFileUploadResource(Resource):
             return {'errors': err.messages}, 400
         self.service.process_upload(result)
         return {'message': 'File uploaded successfully'}
+
+class OtpReportResource(Resource):
+    def __init__(self, service):
+        super().__init__()
+        self.service: OtpPlaybackService = service
+    
+    report_request_schema = ReportRequestSchema
+    schema = OtpSchema
+
+    @required_acl('workano.otp.report')
+    def get(self):
+        form = self.report_request_schema().load(request.get_json())
+        result = self.service.get_report(form)
+        return self.schema().dump(result, many=True)

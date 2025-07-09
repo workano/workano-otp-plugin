@@ -4,6 +4,8 @@ import traceback
 import time
 from datetime import datetime
 from threading import Thread
+
+from workano_otp_plugin.schema import ReportRequestSchema
 from .model import OtpModel
 from datetime import datetime, timezone
 from marshmallow import ValidationError
@@ -218,6 +220,9 @@ class OtpPlaybackService:
         file.save(file_path)
 
 
+    def get_report(self, params):
+        requests = dao.search(params)
+        return requests
     # def find_next_campaign_contact_call(self, application_uuid):
     #     campaign = self.get_by(application_uuid=application_uuid)
     #     if campaign.state != "start" and campaign.state != "resume":
