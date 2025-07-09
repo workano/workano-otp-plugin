@@ -13,6 +13,7 @@ class Plugin:
         logger.info('otp request plugin loading')
         api = dependencies['api']
         config = dependencies['config']
+        print('config>>>>>>>>>>', config)
         auth_client = AuthClient(**config['auth'])
         calld_client = CalldClient(host='127.0.0.1', port=443, verify_certificate=False, https=True)
         confd_client = ConfdClient(host='127.0.0.1', port=443, verify_certificate=False, https=True)
