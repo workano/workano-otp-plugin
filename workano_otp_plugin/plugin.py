@@ -5,7 +5,7 @@ from wazo_confd_client import Client as ConfdClient
 from .db import init_db
 from .services import build_otp_request_service
 from .bus_consume import OtpBusEventHandler
-from .resource import OtpFileUploadResource, OtpPlaybackResource
+from .resource import OtpFileUploadResource, OtpPlaybackResource, OtpReportResource
 logger = logging.getLogger(__name__)
 
 class Plugin:
