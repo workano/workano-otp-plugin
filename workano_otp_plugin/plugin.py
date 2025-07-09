@@ -1,5 +1,4 @@
 import logging
-from wazo_auth_client.auth_token import get_token_from_key_file
 from wazo_calld_client import Client as CalldClient
 from wazo_auth_client import Client as AuthClient
 from wazo_confd_client import Client as ConfdClient
