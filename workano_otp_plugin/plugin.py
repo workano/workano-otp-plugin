@@ -6,10 +6,16 @@ from .db import init_db
 from .services import build_otp_request_service
 from .bus_consume import OtpBusEventHandler
 from .resource import OtpFileUploadResource, OtpPlaybackResource, OtpReportResource
+import os
+import pwd
 logger = logging.getLogger(__name__)
 
 class Plugin:
     def load(self, dependencies):
+        uid = os.geteuid()
+        user = pwd.getpwuid(uid).pw_name
+        print(f"Running as user: {user}")
+
         logger.info('otp request plugin loading')
         api = dependencies['api']
         config = dependencies['config']
