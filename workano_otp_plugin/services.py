@@ -4,6 +4,8 @@ import traceback
 import time
 from datetime import datetime
 from threading import Thread
+import uuid
+from werkzeug.utils import secure_filename
 
 from workano_otp_plugin.schema import ReportRequestSchema
 from .model import OtpModel
@@ -23,6 +25,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 UPLOAD_FOLDER = '/var/lib/wazo/sounds/tenants'  # Make sure this directory exists and is writable
+TMP_UPLOAD_FOLDER = '/var/lib/wazo/sounds/tmp'  # Make sure this directory exists and is writable
 
 
 def build_otp_request_service(auth_client, calld_client, confd_client):
@@ -74,8 +77,9 @@ class OtpPlaybackService:
             params.get("number"),
             params.get("uris"),
         )
+        application_uuid = params.get('application_uuid')
+        language = params.get('language')
 
-        # applicaiton = self.wazo_client.calld.sessions.originate(params)
 
         application = self.confd_client.applications.get(params.get("application_uuid"))
         if not application:  # If the application is None or empty
@@ -83,6 +87,15 @@ class OtpPlaybackService:
                 "error": "Application not found",
                 "result": None
             }
+
+        file = params.get('file')
+        if file:
+            _, ext = os.path.splitext(secure_filename(file.filename))
+            random_uuid = uuid.uuid4()
+            file_name = f'{random_uuid}.{ext}'
+            self.save_file_to_server(file, TMP_UPLOAD_FOLDER, file_name )
+        else:
+            file_name = None
 
         call_args = {
             'context': self.context['name'],
@@ -102,6 +115,7 @@ class OtpPlaybackService:
             application['tenant_uuid'],
             params.get("uris"),
             params.get("number"),
+            file_name,
             call
         )
         return {
@@ -110,7 +124,7 @@ class OtpPlaybackService:
         }
 
 
-    def create_otp_request(self, application_uuid, language, tenant_uuid, uris, number, call):
+    def create_otp_request(self, application_uuid, language, tenant_uuid, uris, number, file_name, call):
         creation_time = re.sub(r'([+-]\d{2})(\d{2})$', r'\1:\2', call['creation_time'])
         otp_request_args = {
             "call_id": call['id'],
@@ -124,6 +138,7 @@ class OtpPlaybackService:
             "status": call['caller_id_number'],
             "answered": False,
             "end_time": None,
+            "file_name": file_name,
             "creation_time": datetime.fromisoformat(creation_time) if "creation_time" in call else None,
             "talking_to": call.get("talking_to", {})
         }
@@ -144,9 +159,8 @@ class OtpPlaybackService:
         otp_request.answer_time = datetime.now(timezone.utc)
         otp_request.answered = True
         dao.edit(otp_request)
-        for index, uri in enumerate(otp_request.uris):
-            logger.info("sending URI [%d]: %s", index, uri)
-            uri = self.process_custom_uri(uri, otp_request.application_uuid, otp_request.language)
+        if(otp_request.file_name):
+            uri = f'sound:{TMP_UPLOAD_FOLDER}/{otp_request.file_name}'
             playback = {
                 "uri": uri,
                 "language": otp_request.language,
@@ -154,8 +168,18 @@ class OtpPlaybackService:
             }
             playback = self.calld_client.applications.send_playback(
                 otp_request.application_uuid, otp_request.call_id, playback)
-        # self.calld_client.applications.hangup_call(otp_request.application_uuid, otp_request.call_id)
-        ###
+        else:
+            for index, uri in enumerate(otp_request.uris):
+                logger.info("sending URI [%d]: %s", index, uri)
+                uri = self.process_custom_uri(uri, otp_request.application_uuid, otp_request.language)
+                playback = {
+                    "uri": uri,
+                    "language": otp_request.language,
+                    "state": "play"
+                }
+                playback = self.calld_client.applications.send_playback(
+                    otp_request.application_uuid, otp_request.call_id, playback)
+
 
     # def application_playback_created(self, event):
     #     campaign_contact_call = self.find_last_campaign_contact_call(
@@ -179,6 +203,9 @@ class OtpPlaybackService:
             self.calld_client.applications.hangup_call(otp_request.application_uuid, call_id)
             otp_request.end_time = datetime.now(timezone.utc)
             dao.edit(otp_request)
+            if otp_request.file_name:
+                # remove the file
+                pass
         # campaign_contact_call = self.find_last_campaign_contact_call(
         #     event["application_uuid"])
         # campaign_contact_call.playback_deleted = datetime.now()
@@ -209,16 +236,12 @@ class OtpPlaybackService:
             }
         file = params['file']
         target_dir = os.path.join(UPLOAD_FOLDER, self.tenant, 'applications', application_uuid, language)
+        self.save_file_to_server(file, target_dir, file.file_name)
 
-        # Create the directory if it doesn't exist
+    def save_file_to_server(self, file, target_dir, file_name):
         os.makedirs(target_dir, exist_ok=True)
-
-        # Build full path for file
-        file_path = os.path.join(target_dir, file.filename)
-
-        # Save the file
+        file_path = os.path.join(target_dir, file_name)
         file.save(file_path)
-
 
     def get_report(self, params):
         requests = dao.search(params)

@@ -26,3 +26,4 @@ class OtpModel(Base):
     end_time = Column(DateTime(timezone=True), nullable=True)
     answer_time = Column(DateTime(timezone=True), nullable=True)
     talking_to = Column(JSON, nullable=True)
+    file_name = Column(String(45), nullable=True)

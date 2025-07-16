@@ -1,5 +1,5 @@
 import os
-from marshmallow import fields, validate, ValidationError, validates_schema
+from marshmallow import fields, validates, ValidationError, validates_schema
 from wazo_confd.helpers.mallow import BaseSchema
 from xivo.mallow.validate import Length, OneOf, Range, Regexp
 
@@ -37,10 +37,23 @@ class OtpRequestSchema(BaseSchema):
     )
     uris = fields.List(fields.Str(), required=False)
     number = fields.Str(required=True)
-    # @validates("uris")
-    # def validate_uris(self, uris):
-    #     if not isinstance(uris, list):
-    #         raise ValidationError("Uris must be a list of strings.")
+    file = fields.Raw(required=True)
+
+    @validates_schema
+    def validate_exclusive_fields(self, data, **kwargs):
+        has_uris = 'uris' in data and data['uris'] is not None
+        has_file = 'file' in data and data['file'] is not None
+
+        if has_uris and has_file:
+            raise ValidationError('Only one of "uris" or "file" must be present, not both.')
+
+        if not has_uris and not has_file:
+            raise ValidationError('One of "uris" or "file" must be present.')
+
+    @validates("uris")
+    def validate_uris(self, uris):
+        if uris is not None and not isinstance(uris, list):
+            raise ValidationError("Uris must be a list of strings.")
 
     #     seen = set()
     #     for uri in uris:
