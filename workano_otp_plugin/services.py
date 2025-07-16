@@ -92,7 +92,7 @@ class OtpPlaybackService:
         if file:
             _, ext = os.path.splitext(secure_filename(file.filename))
             random_uuid = uuid.uuid4()
-            file_name = f'{random_uuid}.{ext}'
+            file_name = f'{random_uuid}{ext}'
             self.save_file_to_server(file, TMP_UPLOAD_FOLDER, file_name )
         else:
             file_name = None
