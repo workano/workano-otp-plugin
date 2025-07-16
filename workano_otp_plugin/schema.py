@@ -37,7 +37,7 @@ class OtpRequestSchema(BaseSchema):
     )
     uris = fields.List(fields.Str(), required=False)
     number = fields.Str(required=True)
-    file = fields.Raw(required=True)
+    file = fields.Raw(required=False)
 
     @validates_schema
     def validate_exclusive_fields(self, data, **kwargs):

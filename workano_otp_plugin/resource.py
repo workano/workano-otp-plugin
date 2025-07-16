@@ -61,8 +61,18 @@ class OtpPlaybackResource(Resource):
 
     @required_acl('workano.otp.request')
     def post(self):
-        form = self.request_schema().load(request.get_json())
-        # model = self.model(**form)
+        if request.is_json:
+            data = request.get_json()
+        else:
+            json_part = request.form.to_dict()
+            file_part = request.files.get('file')
+            data = {**json_part, 'file': file_part}
+
+        try:
+            form = self.request_schema().load(data)
+        except ValidationError as err:
+            return {'errors': err.messages}, 400
+
         model = self.service.process_otp_request(form)
         return self.schema().dump(model['result']), 201, self.build_headers(model['result'])
     
