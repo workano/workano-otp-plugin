@@ -160,7 +160,7 @@ class OtpPlaybackService:
         otp_request.answered = True
         dao.edit(otp_request)
         if(otp_request.file_name):
-            path_name = os.path.splitext(otp_request.file_name)
+            path_name, _ = os.path.splitext(otp_request.file_name)
             uri = 'sound:' + os.path.join(TMP_UPLOAD_FOLDER, path_name)
             playback = {
                 "uri": uri,
