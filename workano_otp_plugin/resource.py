@@ -124,4 +124,4 @@ class OtpReportItemResource(Resource):
     def get(self, uuid):
         form = self.report_item_request_schema().load(request.args)
         result = self.service.get_report(form, uuid)
-        return self.schema().dump(result, many=True)
+        return self.schema().dump(result)
