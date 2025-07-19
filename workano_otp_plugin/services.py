@@ -50,14 +50,14 @@ class OtpPlaybackService:
         self.confd_client:ConfdClient  = confd_client
         # token = self.auth_client.token.new(
         #     expiration=365 * 24 * 60 * 60)['token']
-        token = '23f091e8-7800-4275-b3fc-43ddadbe9f4b'
+        # token = '23f091e8-7800-4275-b3fc-43ddadbe9f4b'
         # token = '1965b0da-5591-4222-8995-04b7af338ed5'
         # print('>>>>>token', token)
-        self.tenant = 'd41c632c-68d2-457f-b064-c0f479515255'
-        self.calld_client.set_token(token)
-        self.confd_client.set_token(token)
-        self.calld_client.set_tenant(self.tenant)
-        self.confd_client.set_tenant(self.tenant)
+        # self.tenant = 'd41c632c-68d2-457f-b064-c0f479515255'
+        # self.calld_client.set_token(token)
+        # self.confd_client.set_token(token)
+        # self.calld_client.set_tenant(self.tenant)
+        # self.confd_client.set_tenant(self.tenant)
         contexts = self.confd_client.contexts.list(tenant=self.tenant, type='internal' )
         self.context = contexts['items'][0] if contexts['items'] and len(contexts['items'])> 0 else None
 
