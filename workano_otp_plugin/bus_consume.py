@@ -23,6 +23,7 @@ class OtpBusEventHandler:
         # bus_consumer.subscribe('application_node_updated', self._application_node_updated)
         # bus_consumer.subscribe('application_user_outgoing_call_created', self._application_user_outgoing_call_created)
         bus_consumer.subscribe('call_ended', self._call_ended)
+        bus_consumer.subscribe('call_answered', self._call_answered)
         # bus_consumer.subscribe('call_created', self._call_created)
         # bus_consumer.subscribe('call_updated', self._call_updated)
 
@@ -109,6 +110,8 @@ class OtpBusEventHandler:
     #     logger.warning('========>call_created<===========')
     #     logger.warning(event)
 
+    def _call_answered(self, event):
+        self._service.call_answered(event)
     # def _call_updated(self, event):
     #     logger.warning('========>call_updated<===========')
     #     logger.warning(event)

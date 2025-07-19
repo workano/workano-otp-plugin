@@ -298,6 +298,9 @@ class OtpPlaybackService:
             otp_request.status = status
             dao.edit(otp_request)
 
+    def call_answered(self, event):
+        logger.warning('========>call_answered<===========')
+        logger.warning(event)
     # def find_next_campaign_contact_call(self, application_uuid):
     #     campaign = self.get_by(application_uuid=application_uuid)
     #     if campaign.state != "start" and campaign.state != "resume":
