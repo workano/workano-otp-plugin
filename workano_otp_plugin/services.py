@@ -273,9 +273,9 @@ class OtpPlaybackService:
                 "result": None
             }
         if uuid:
-            requests = dao.find_all_by({**params, 'uuid': uuid})
+            requests = dao.find_by({'uuid': uuid})
         else:
-            requests = dao.find_by(params)
+            requests = dao.find_all_by(params)
         return requests
     # def find_next_campaign_contact_call(self, application_uuid):
     #     campaign = self.get_by(application_uuid=application_uuid)
