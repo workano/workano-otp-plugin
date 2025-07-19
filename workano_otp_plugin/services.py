@@ -284,6 +284,8 @@ class OtpPlaybackService:
         except:
             otp_request = None
         if otp_request and otp_request.status != "":
+            logger.warning('========>call_ended<===========')
+            logger.warning(event)
             reason_code = event['reason_code']
             reason_map = {
                 16: 'NORMAL_END',

@@ -102,8 +102,8 @@ class OtpBusEventHandler:
         # 'is_caller': False, 'caller_id_number': '161', 'bridges': [], 'call_id': '1662448594.22', 'line_id': 2,
         # 'dialed_extension': '101', 'peer_caller_id_name': 'test2', 'peer_caller_id_number': '101',
         # 'caller_id_name': 'Milad Razban', 'reason_code': 16}
-        logger.warning('========>call_ended<===========')
-        logger.warning(event)
+        # logger.warning('========>call_ended<===========')
+        # logger.warning(event)
         self._service.call_ended(event)
     # def _call_created(self, event):
     #     logger.warning('========>call_created<===========')
