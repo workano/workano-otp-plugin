@@ -58,7 +58,7 @@ class Plugin:
         )
         api.add_resource(
             OtpReportItemResource,
-            '/otp/report/<str:uuid>',
+            '/otp/report/<uuid:uuid>',
             resource_class_args=(otp_request_service,)
         )
     def unload(self):
