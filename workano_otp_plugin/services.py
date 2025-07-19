@@ -285,7 +285,7 @@ class OtpPlaybackService:
         try:
             otp_request = dao.get_by(call_id=call_id)
         except:
-            logger.log('call not found %', call_id)
+            logger.log(f'call not found {call_id}', )
             otp_request = None
         if otp_request and otp_request.status != "":
             logger.warning('========>call_ended<===========')
