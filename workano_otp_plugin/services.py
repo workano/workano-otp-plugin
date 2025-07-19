@@ -174,6 +174,7 @@ class OtpPlaybackService:
             return
         otp_request.answer_time = datetime.now(timezone.utc)
         otp_request.answered = True
+        otp_request.status = 'ANSWERED'
         dao.edit(otp_request)
         if(otp_request.file_name):
             path_name, _ = os.path.splitext(otp_request.file_name)
@@ -275,6 +276,22 @@ class OtpPlaybackService:
         else:
             requests = dao.find_all_by(params)
         return requests
+
+    def call_ended(self, event):
+        call_id = event['call_id']
+        otp_request = dao.get_by(call_id=call_id)
+        if otp_request.answered is None:
+            reason_code = event['reason_code']
+            reason_map = {
+                17: "USER_BUSY",
+                18: "NOT_ANSWERED",
+                19: "NOT_ANSWERED",
+                21: "REJECTED"
+            }
+            status = reason_map[reason_code] if reason_code in reason_map.keys() else 'UNKNOWN'
+            otp_request.status = status
+            dao.edit(otp_request)
+
     # def find_next_campaign_contact_call(self, application_uuid):
     #     campaign = self.get_by(application_uuid=application_uuid)
     #     if campaign.state != "start" and campaign.state != "resume":
