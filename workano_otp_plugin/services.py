@@ -272,7 +272,7 @@ class OtpPlaybackService:
                 "result": None
             }
         if uuid:
-            requests = dao.find_by({'uuid': uuid})
+            requests = dao.find(uuid)
         else:
             requests = dao.find_all_by(params)
         return requests
