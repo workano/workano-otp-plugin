@@ -281,7 +281,7 @@ class OtpPlaybackService:
         return requests
 
     def call_ended(self, event):
-        call_id = event['call_id']
+        call_id = event['conversation_id']
         try:
             otp_request = dao.get_by(call_id=call_id)
         except:
