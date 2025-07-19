@@ -172,10 +172,6 @@ class OtpPlaybackService:
         if not otp_request:
             logger.info("Couldn't find otp request for call_id: %s", call_id)
             return
-        otp_request.answer_time = datetime.now(timezone.utc)
-        otp_request.answered = True
-        otp_request.status = 'ANSWERED'
-        dao.edit(otp_request)
         if(otp_request.file_name):
             path_name, _ = os.path.splitext(otp_request.file_name)
             upload_folder = TTS_UPLOAD_FOLDER if otp_request.tts else TMP_UPLOAD_FOLDER
@@ -199,6 +195,10 @@ class OtpPlaybackService:
                 playback = self.calld_client.applications.send_playback(
                     otp_request.application_uuid, otp_request.call_id, playback)
 
+        otp_request.answer_time = datetime.now(timezone.utc)
+        otp_request.answered = True
+        otp_request.status = 'ANSWERED'
+        dao.edit(otp_request)
 
     # def application_playback_created(self, event):
     #     campaign_contact_call = self.find_last_campaign_contact_call(
