@@ -16,7 +16,7 @@ from wazo_confd.auth import required_acl
 from flask_restful import Resource
 
 from .model import OtpModel
-from .schema import OtpRequestSchema, OtpSchema, OtpUploadRequestSchema, ReportItemRequestSchema, ReportRequestSchema
+from .schema import OtpReportSchema, OtpRequestSchema, OtpSchema, OtpUploadRequestSchema, ReportItemRequestSchema, ReportRequestSchema
 
 auth_verifier = AuthVerifierFlask()
 logger = logging.getLogger(__name__)
@@ -102,15 +102,12 @@ class OtpReportResource(Resource):
         self.service: OtpPlaybackService = service
     
     report_request_schema = ReportRequestSchema
-    schema = OtpSchema
+    schema = OtpReportSchema
 
     @required_acl('workano.otp.report')
     def get(self):
         form = self.report_request_schema().load(request.args)
         result = self.service.get_report(form)
-        print('result>>>>>', result)
-        dumped = self.schema().dump(result, many=True)
-        print('dumped>>>>>', dumped)
         return self.schema().dump(result, many=True), 200
 
 
@@ -121,10 +118,10 @@ class OtpReportItemResource(Resource):
         self.service: OtpPlaybackService = service
     
     report_item_request_schema = ReportItemRequestSchema
-    schema = OtpSchema
+    schema = OtpReportSchema
 
     @required_acl('workano.otp.report')
-    def get(self):
+    def get(self, uuid):
         form = self.report_item_request_schema().load(request.args)
-        result = self.service.get_report(form)
+        result = self.service.get_report(form, uuid)
         return self.schema().dump(result, many=True)

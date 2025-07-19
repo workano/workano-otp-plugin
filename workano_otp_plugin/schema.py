@@ -7,7 +7,6 @@ class ReportRequestSchema(BaseSchema):
     application_uuid = fields.Str(required=True)
 
 class ReportItemRequestSchema(BaseSchema):
-    id = fields.Str(required=True)
     application_uuid = fields.Str(required=True)
 
 class OtpUploadRequestSchema(BaseSchema):
@@ -129,3 +128,20 @@ class OtpSchema(BaseSchema):
     #                 raise ValidationError(f"Invalid 'digits' value: '{value}' must be a number.")
     #         else:
     #             raise ValidationError(f"Invalid uri prefix: '{prefix}'. Expected 'sound' or 'digits'.")
+
+
+class OtpReportSchema(BaseSchema):
+    uuid = fields.Str(dump_only=True)
+    application_uuid = fields.Str(dump_only=True)
+    number = fields.Str()
+    caller_id_name = fields.Str()
+    caller_id_number = fields.Str()
+    answered = fields.Boolean()
+    language = fields.Str()
+    status = fields.Str()
+    creation_time = fields.Date()
+    end_time = fields.Date()
+    answer_time = fields.Date()
+    uris = fields.List(fields.Str())
+    file_name = fields.List(fields.Str())
+    

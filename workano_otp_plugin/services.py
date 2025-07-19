@@ -262,7 +262,7 @@ class OtpPlaybackService:
         file_path = os.path.join(target_dir, file_name)
         file.save(file_path)
 
-    def get_report(self, params):
+    def get_report(self, params, uuid=None):
         application_uuid = params.get('application_uuid')
         uuid = params.get('id')
 
@@ -272,7 +272,10 @@ class OtpPlaybackService:
                 "error": "Application not found",
                 "result": None
             }
-        requests = dao.find_all_by(params)
+        if uuid:
+            requests = dao.find_all_by({**params, 'uuid': uuid})
+        else:
+            requests = dao.find_all_by(params)
         return requests
     # def find_next_campaign_contact_call(self, application_uuid):
     #     campaign = self.get_by(application_uuid=application_uuid)
