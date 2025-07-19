@@ -273,7 +273,7 @@ class OtpPlaybackService:
                 "result": None
             }
         requests = dao.search(params)
-        return requests
+        return requests.rows
     # def find_next_campaign_contact_call(self, application_uuid):
     #     campaign = self.get_by(application_uuid=application_uuid)
     #     if campaign.state != "start" and campaign.state != "resume":
