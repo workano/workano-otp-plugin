@@ -263,7 +263,6 @@ class OtpPlaybackService:
 
     def get_report(self, params, uuid=None):
         application_uuid = params.get('application_uuid')
-        uuid = params.get('id')
 
         application = self.confd_client.applications.get(application_uuid)
         if not application:  # If the application is None or empty
