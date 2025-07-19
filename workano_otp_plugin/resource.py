@@ -108,7 +108,7 @@ class OtpReportResource(Resource):
     def get(self):
         form = self.report_request_schema().load(request.args)
         result = self.service.get_report(form)
-        return self.schema().dump(result), 200
+        return self.schema().dump(result, many=True), 200
 
 
 
