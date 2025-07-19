@@ -272,8 +272,8 @@ class OtpPlaybackService:
                 "error": "Application not found",
                 "result": None
             }
-        requests = dao.search(params)
-        return requests.rows
+        requests = dao.find_all_by(params)
+        return requests
     # def find_next_campaign_contact_call(self, application_uuid):
     #     campaign = self.get_by(application_uuid=application_uuid)
     #     if campaign.state != "start" and campaign.state != "resume":
