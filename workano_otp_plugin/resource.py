@@ -106,7 +106,7 @@ class OtpReportResource(Resource):
 
     @required_acl('workano.otp.report')
     def get(self):
-        form = self.report_request_schema().load(request.get_json())
+        form = self.report_request_schema().load(request.args())
         result = self.service.get_report(form)
         return self.schema().dump(result), 200
 
@@ -122,6 +122,6 @@ class OtpReportItemResource(Resource):
 
     @required_acl('workano.otp.report')
     def get(self):
-        form = self.report_item_request_schema().load(request.get_json())
+        form = self.report_item_request_schema().load(request.args())
         result = self.service.get_report(form)
         return self.schema().dump(result, many=True)
