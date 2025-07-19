@@ -263,6 +263,15 @@ class OtpPlaybackService:
         file.save(file_path)
 
     def get_report(self, params):
+        application_uuid = params.get('application_uuid')
+        uuid = params.get('id')
+
+        application = self.confd_client.applications.get(application_uuid)
+        if not application:  # If the application is None or empty
+            return {
+                "error": "Application not found",
+                "result": None
+            }
         requests = dao.search(params)
         return requests
     # def find_next_campaign_contact_call(self, application_uuid):

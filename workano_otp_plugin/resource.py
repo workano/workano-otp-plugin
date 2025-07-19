@@ -16,7 +16,7 @@ from wazo_confd.auth import required_acl
 from flask_restful import Resource
 
 from .model import OtpModel
-from .schema import OtpRequestSchema, OtpSchema, OtpUploadRequestSchema, ReportRequestSchema
+from .schema import OtpRequestSchema, OtpSchema, OtpUploadRequestSchema, ReportItemRequestSchema, ReportRequestSchema
 
 auth_verifier = AuthVerifierFlask()
 logger = logging.getLogger(__name__)
@@ -74,7 +74,9 @@ class OtpPlaybackResource(Resource):
             return {'errors': err.messages}, 400
 
         model = self.service.process_otp_request(form)
-        return self.schema().dump(model['result']), 200, self.build_headers(model['result'])
+        result = self.schema().dump(model['result'])
+
+        return {'uuid': result['uuid']}, 200, self.build_headers(model['result'])
     
 class OtpFileUploadResource(Resource):
     def __init__(self, service):
@@ -105,5 +107,21 @@ class OtpReportResource(Resource):
     @required_acl('workano.otp.report')
     def get(self):
         form = self.report_request_schema().load(request.get_json())
+        result = self.service.get_report(form)
+        return self.schema().dump(result, many=True)
+
+
+
+class OtpReportItemResource(Resource):
+    def __init__(self, service):
+        super().__init__()
+        self.service: OtpPlaybackService = service
+    
+    report_item_request_schema = ReportItemRequestSchema
+    schema = OtpSchema
+
+    @required_acl('workano.otp.report')
+    def get(self):
+        form = self.report_item_request_schema().load(request.get_json())
         result = self.service.get_report(form)
         return self.schema().dump(result, many=True)

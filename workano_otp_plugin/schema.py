@@ -4,7 +4,12 @@ from wazo_confd.helpers.mallow import BaseSchema
 from xivo.mallow.validate import Length, OneOf, Range, Regexp
 
 class ReportRequestSchema(BaseSchema):
-    pass
+    application_uuid = fields.Str(required=True)
+
+class ReportItemRequestSchema(BaseSchema):
+    id = fields.Str(required=True)
+    application_uuid = fields.Str(required=True)
+
 class OtpUploadRequestSchema(BaseSchema):
     language = fields.Str(
         required=True, 

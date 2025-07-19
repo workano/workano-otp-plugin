@@ -5,7 +5,7 @@ from wazo_confd_client import Client as ConfdClient
 from .db import init_db
 from .services import build_otp_request_service
 from .bus_consume import OtpBusEventHandler
-from .resource import OtpFileUploadResource, OtpPlaybackResource, OtpReportResource
+from .resource import OtpFileUploadResource, OtpPlaybackResource, OtpReportItemResource, OtpReportResource
 import os
 import pwd
 logger = logging.getLogger(__name__)
@@ -54,6 +54,11 @@ class Plugin:
         api.add_resource(
             OtpReportResource,
             '/otp/report',
+            resource_class_args=(otp_request_service,)
+        )
+        api.add_resource(
+            OtpReportItemResource,
+            '/otp/report/:uuid',
             resource_class_args=(otp_request_service,)
         )
     def unload(self):
