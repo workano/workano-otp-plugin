@@ -28,11 +28,13 @@ UPLOAD_FOLDER = '/var/lib/wazo/sounds/tenants'  # Make sure this directory exist
 TMP_UPLOAD_FOLDER = '/var/lib/wazo/sounds/tmp'  # Make sure this directory exists and is writable
 
 
-def build_otp_request_service(auth_client, calld_client, confd_client):
+def build_otp_request_service(auth_client, calld_client, confd_client, token, tenant):
     return OtpPlaybackService(
         auth_client,
         calld_client,
         confd_client,
+        token,
+        tenant,
         dao
     )
 
@@ -43,10 +45,14 @@ class OtpPlaybackService:
                  auth_client,
                  calld_client,
                  confd_client,
+                 token,
+                 tenant,
                  dao,
                  extra_parameters=None):
         self.auth_client = auth_client
         self.calld_client = calld_client
+        self.token = token
+        self.tenant = tenant
         self.confd_client:ConfdClient  = confd_client
         # token = self.auth_client.token.new(
         #     expiration=365 * 24 * 60 * 60)['token']
@@ -58,7 +64,7 @@ class OtpPlaybackService:
         # self.confd_client.set_token(token)
         # self.calld_client.set_tenant(self.tenant)
         # self.confd_client.set_tenant(self.tenant)
-        contexts = self.confd_client.contexts.list(tenant=self.tenant, type='internal' )
+        contexts = self.confd_client.contexts.list(type='internal' )
         self.context = contexts['items'][0] if contexts['items'] and len(contexts['items'])> 0 else None
 
 
