@@ -202,9 +202,9 @@ class OtpPlaybackService:
         if not otp_request:
             logger.info("Couldn't find otp request for call_id: %s", call_id)
             return
-        last_uri = self.process_custom_uri(otp_request.uris[-1], otp_request.application_uuid, otp_request.language)
+        last_uri = self.process_custom_uri(otp_request.uris[-1], otp_request.application_uuid, otp_request.language) if otp_request.uris else None
         event_uri = event['playback']['uri']
-        if event_uri == last_uri:
+        if event_uri == last_uri or otp_request.file_name:
             logger.info("Event URI matches the last URI in the OTP request. Hanging up call.")
             # self.hangup_application_call(event["application_uuid"])
             self.calld_client.applications.hangup_call(otp_request.application_uuid, call_id)
