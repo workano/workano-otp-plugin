@@ -38,17 +38,15 @@ class OtpRequestSchema(BaseSchema):
     uris = fields.List(fields.Str(), required=False)
     number = fields.Str(required=True)
     file = fields.Raw(required=False)
+    tts = fields.Str(required=False)
 
     @validates_schema
     def validate_exclusive_fields(self, data, **kwargs):
-        has_uris = 'uris' in data and data['uris'] is not None
-        has_file = 'file' in data and data['file'] is not None
-
-        if has_uris and has_file:
-            raise ValidationError('Only one of "uris" or "file" must be present, not both.')
-
-        if not has_uris and not has_file:
-            raise ValidationError('One of "uris" or "file" must be present.')
+        fields_present = [field for field in ['uris', 'file', 'tts'] if data.get(field) is not None]
+        if len(fields_present) == 0:
+            raise ValidationError("One of 'uris', 'file' must be provided.")
+        elif len(fields_present) > 1:
+            raise ValidationError("Only one of 'uris', 'file' can be provided.")
 
     @validates("uris")
     def validate_uris(self, uris):
