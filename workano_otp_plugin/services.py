@@ -194,7 +194,7 @@ class OtpPlaybackService:
                 }
                 playback = self.calld_client.applications.send_playback(
                     otp_request.application_uuid, otp_request.call_id, playback)
-
+        # if the playback was successful, update the status. otherwise the user `probably` not answered the call
         otp_request.answer_time = datetime.now(timezone.utc)
         otp_request.answered = True
         otp_request.status = 'ANSWERED'
@@ -219,7 +219,10 @@ class OtpPlaybackService:
         if event_uri == last_uri or otp_request.file_name:
             logger.info("Event URI matches the last URI in the OTP request. Hanging up call.")
             # self.hangup_application_call(event["application_uuid"])
-            self.calld_client.applications.hangup_call(otp_request.application_uuid, call_id)
+            try:
+                self.calld_client.applications.hangup_call(otp_request.application_uuid, call_id)
+            except:
+                pass
             otp_request.end_time = datetime.now(timezone.utc)
             dao.edit(otp_request)
             if otp_request.file_name:
@@ -282,6 +285,7 @@ class OtpPlaybackService:
         try:
             otp_request = dao.get_by(call_id=call_id)
         except:
+            logger.log('call not found %', call_id)
             otp_request = None
         if otp_request and otp_request.status != "":
             logger.warning('========>call_ended<===========')
