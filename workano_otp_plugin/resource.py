@@ -74,7 +74,7 @@ class OtpPlaybackResource(Resource):
             return {'errors': err.messages}, 400
 
         model = self.service.process_otp_request(form)
-        return self.schema().dump(model['result']), 201, self.build_headers(model['result'])
+        return self.schema().dump(model['result']), 200, self.build_headers(model['result'])
     
 class OtpFileUploadResource(Resource):
     def __init__(self, service):

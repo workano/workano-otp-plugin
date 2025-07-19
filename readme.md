@@ -11,3 +11,5 @@ otp-plugin:
     api-url: https://api.farsireader.com/ArianaCloudService/ReadTextGET
 
 ```
+
+then reload wazo-calld service
