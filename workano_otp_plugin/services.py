@@ -279,10 +279,14 @@ class OtpPlaybackService:
 
     def call_ended(self, event):
         call_id = event['call_id']
-        otp_request = dao.get_by(call_id=call_id)
-        if otp_request.answered is None:
+        try:
+            otp_request = dao.get_by(call_id=call_id)
+        except:
+            otp_request = None
+        if otp_request and otp_request.status != "":
             reason_code = event['reason_code']
             reason_map = {
+                16: 'NORMAL_END',
                 17: "USER_BUSY",
                 18: "NOT_ANSWERED",
                 19: "NOT_ANSWERED",
