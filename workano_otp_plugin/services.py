@@ -288,7 +288,7 @@ class OtpPlaybackService:
             logger.log(f'call not found {call_id}', )
             otp_request = None
         print('otp_request>>>>>>>>>>', otp_request)
-        if otp_request and otp_request.status != "":
+        if otp_request and otp_request.status == "":
             logger.warning('========>call_ended<===========')
             logger.warning(event)
             reason_code = event['reason_code']
