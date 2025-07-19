@@ -151,7 +151,7 @@ class OtpPlaybackService:
             "language": language,
             "uris": uris,
             "tts": tts,
-            "status": call['caller_id_number'],
+            "status": '',
             "answered": False,
             "end_time": None,
             "file_name": file_name,
