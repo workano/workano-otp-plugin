@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 from threading import Thread
 import uuid
+import requests
 from werkzeug.utils import secure_filename
 
 from workano_otp_plugin.schema import ReportRequestSchema
@@ -26,15 +27,15 @@ import logging
 logger = logging.getLogger(__name__)
 UPLOAD_FOLDER = '/var/lib/wazo/sounds/tenants'  # Make sure this directory exists and is writable
 TMP_UPLOAD_FOLDER = '/var/lib/wazo/sounds/tmp'  # Make sure this directory exists and is writable
+TTS_UPLOAD_FOLDER = '/var/lib/wazo/sounds/tts'  # Make sure this directory exists and is writable
 
 
-def build_otp_request_service(auth_client, calld_client, confd_client, token, tenant):
+def build_otp_request_service(auth_client, calld_client, confd_client, otp_config):
     return OtpPlaybackService(
         auth_client,
         calld_client,
         confd_client,
-        token,
-        tenant,
+        otp_config,
         dao
     )
 
@@ -45,25 +46,17 @@ class OtpPlaybackService:
                  auth_client,
                  calld_client,
                  confd_client,
-                 token,
-                 tenant,
+                 otp_config,
                  dao,
                  extra_parameters=None):
         self.auth_client = auth_client
         self.calld_client = calld_client
-        self.token = token
-        self.tenant = tenant
+        self.token = otp_config['token']
+        self.tenant = otp_config['tenant']
+        self.otp_config = otp_config
         self.confd_client:ConfdClient  = confd_client
         # token = self.auth_client.token.new(
         #     expiration=365 * 24 * 60 * 60)['token']
-        # token = '23f091e8-7800-4275-b3fc-43ddadbe9f4b'
-        # token = '1965b0da-5591-4222-8995-04b7af338ed5'
-        # print('>>>>>token', token)
-        # self.tenant = 'd41c632c-68d2-457f-b064-c0f479515255'
-        # self.calld_client.set_token(token)
-        # self.confd_client.set_token(token)
-        # self.calld_client.set_tenant(self.tenant)
-        # self.confd_client.set_tenant(self.tenant)
         contexts = self.confd_client.contexts.list(type='internal' )
         self.context = contexts['items'][0] if contexts['items'] and len(contexts['items'])> 0 else None
 
@@ -95,6 +88,7 @@ class OtpPlaybackService:
             }
 
         file = params.get('file')
+        tts = params.get('tts')
         if file:
             _, ext = os.path.splitext(secure_filename(file.filename))
             random_uuid = uuid.uuid4()
@@ -102,6 +96,20 @@ class OtpPlaybackService:
             self.save_file_to_server(file, TMP_UPLOAD_FOLDER, file_name )
         else:
             file_name = None
+
+        if tts:
+            response = requests.get(self.otp_config['farsi-reader']['api-url'],{
+                'APIKey': self.otp_config['farsi-reader']['api-key'],
+                'Text': tts,
+                'Speaker': 'Female1',
+                'Format': 'wav8'
+            })
+            random_uuid = uuid.uuid4()
+            file_name = f'{random_uuid}.wav'
+            os.makedirs(TTS_UPLOAD_FOLDER, exist_ok=True)
+            with open(os.path.join(TTS_UPLOAD_FOLDER, file_name)) as f:
+                f.write(response.content)
+
 
         call_args = {
             'context': self.context['name'],
@@ -121,6 +129,7 @@ class OtpPlaybackService:
             application['tenant_uuid'],
             params.get("uris"),
             params.get("number"),
+            tts,
             file_name,
             call
         )
@@ -130,7 +139,7 @@ class OtpPlaybackService:
         }
 
 
-    def create_otp_request(self, application_uuid, language, tenant_uuid, uris, number, file_name, call):
+    def create_otp_request(self, application_uuid, language, tenant_uuid, uris, number, tts, file_name, call):
         creation_time = re.sub(r'([+-]\d{2})(\d{2})$', r'\1:\2', call['creation_time'])
         otp_request_args = {
             "call_id": call['id'],
@@ -141,6 +150,7 @@ class OtpPlaybackService:
             "caller_id_number": call['caller_id_number'],
             "language": language,
             "uris": uris,
+            "tts": tts,
             "status": call['caller_id_number'],
             "answered": False,
             "end_time": None,
@@ -167,7 +177,8 @@ class OtpPlaybackService:
         dao.edit(otp_request)
         if(otp_request.file_name):
             path_name, _ = os.path.splitext(otp_request.file_name)
-            uri = 'sound:' + os.path.join(TMP_UPLOAD_FOLDER, path_name)
+            upload_folder = TTS_UPLOAD_FOLDER if otp_request.tts else TMP_UPLOAD_FOLDER
+            uri = 'sound:' + os.path.join(upload_folder, path_name)
             playback = {
                 "uri": uri,
                 "language": otp_request.language,

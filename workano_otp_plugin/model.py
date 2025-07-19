@@ -2,7 +2,7 @@ from sqlalchemy import (
     Column
 )
 from sqlalchemy import text
-from sqlalchemy.types import (String, Boolean, DateTime,)
+from sqlalchemy.types import (String, Boolean, DateTime, Text)
 from xivo_dao.helpers.db_manager import UUIDAsString
 from sqlalchemy.types import JSON
 
@@ -27,3 +27,4 @@ class OtpModel(Base):
     answer_time = Column(DateTime(timezone=True), nullable=True)
     talking_to = Column(JSON, nullable=True)
     file_name = Column(String(45), nullable=True)
+    tts = Column(Text, nullable=True)

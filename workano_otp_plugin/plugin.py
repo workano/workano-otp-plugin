@@ -19,8 +19,9 @@ class Plugin:
         logger.info('otp request plugin loading')
         api = dependencies['api']
         config = dependencies['config']
-        token = config['otp-plugin']['token']
-        tenant = config['otp-plugin']['tenant']
+        otp_config = config['otp-plugin']
+        token = otp_config['token']
+        tenant = otp_config['tenant']
 
         print('config>>>>>>>>>>', config)
         auth_client = AuthClient(**config['auth'])
@@ -30,7 +31,7 @@ class Plugin:
         calld_client = CalldClient(host='127.0.0.1', port=443, verify_certificate=False, https=True, token=token, tenant=tenant)
         confd_client = ConfdClient(host='127.0.0.1', port=443, verify_certificate=False, https=True, token=token, tenant=tenant)
         init_db('postgresql://asterisk:proformatique@localhost/asterisk?application_name=workano-otp-plugin')
-        otp_request_service = build_otp_request_service(auth_client, calld_client, confd_client, token, tenant)
+        otp_request_service = build_otp_request_service(auth_client, calld_client, confd_client, otp_config)
         bus_consumer = dependencies['bus_consumer']
         bus_event_handler = OtpBusEventHandler(otp_request_service)
 
