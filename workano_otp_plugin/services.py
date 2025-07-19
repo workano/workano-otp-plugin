@@ -107,7 +107,7 @@ class OtpPlaybackService:
             random_uuid = uuid.uuid4()
             file_name = f'{random_uuid}.wav'
             os.makedirs(TTS_UPLOAD_FOLDER, exist_ok=True)
-            with open(os.path.join(TTS_UPLOAD_FOLDER, file_name)) as f:
+            with open(os.path.join(TTS_UPLOAD_FOLDER, file_name), 'wb') as f:
                 f.write(response.content)
 
 
