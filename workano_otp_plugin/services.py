@@ -104,7 +104,6 @@ class OtpPlaybackService:
                 'Speaker': 'Female1',
                 'Format': 'wav8'
             })
-            print('response>>>>>>', response)
             random_uuid = uuid.uuid4()
             file_name = f'{random_uuid}.wav'
             os.makedirs(TTS_UPLOAD_FOLDER, exist_ok=True)
