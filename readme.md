@@ -1,7 +1,13 @@
+## sample config
+in
+`/etc/wazo-calld/conf.d/otp-plugin.yml`
 
+```yml
 otp-plugin:
-  token: 23f091e8-7800-4275-b3fc-43ddadbe9f4b
-  tenant: d41c632c-68d2-457f-b064-c0f479515255
+  token: uuid
+  tenant: uuid
   farsi-reader:
     api-key: TheAPIKey
     api-url: https://api.farsireader.com/ArianaCloudService/ReadTextGET
+
+```
